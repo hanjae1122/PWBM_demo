@@ -1,4 +1,4 @@
-<div id="table-of-contents">
+﻿<div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
@@ -202,10 +202,6 @@ A simple execution with pipenv will look like:
 -   Name: John Han
 
 GitHub ID: hanjae1122
-
-Hometown: Seoul, Korea
-
-Favorite class so far at Penn: Stat 433, Stochastic Processes
 
 
 
