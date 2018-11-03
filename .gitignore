@@ -5,6 +5,7 @@ ltxpng/
 raw/
 clean/
 vintage_analysis/
+results/
 *.tex
 *.csv
 *.org
