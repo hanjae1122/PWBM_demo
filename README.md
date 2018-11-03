@@ -199,17 +199,10 @@ A simple execution with pipenv will look like:
 ## Notes<a id="sec-1-4" name="sec-1-4"></a>
 
 ## Contributing<a id="sec-1-5" name="sec-1-5"></a>
--   Name: John Han
-
-GitHub ID: hanjae1122
-
-Hometown: Seoul, Korea
-
-Favorite class so far at Penn: Stat 433, Stochastic Processes
-
- Name: Yijie Gui
- Github id:  guiyijie
-
+- John Han: hanjae1122
+- Yijie Gui: guiyijie
+- Tong Shao: shaot0510
+- Siyan Shen: siyanshen
 
 ## Credits<a id="sec-1-6" name="sec-1-6"></a>
 
