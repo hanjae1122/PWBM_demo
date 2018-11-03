@@ -11,7 +11,7 @@
 <li><a href="#sec-1-2-2">Installing</a></li>
 </ul>
 </li>
-<li><a href="#sec-1-3">Usage</a>
+<li><a href="#sec-1-3">Usage</a> 
 <ul>
 <li><a href="#sec-1-3-1">Project structure</a></li>
 <li><a href="#sec-1-3-2">Inputs</a></li>
@@ -203,7 +203,25 @@ A simple execution with pipenv will look like:
 
 GitHub ID: hanjae1122
 
+Hometown: Seoul, Korea
 
+Favorite class so far at Penn: Stat 433, Stochastic Processes
+
+
+GitHub ID: shaot0510
+
+Hometown: China, Beijing
+
+Favorite class so far at Penn: MATH 530
+
+
+-   Name: Siyan Shen
+
+GitHub ID: siyanshen
+
+Hometown: Yangzhou, China
+
+Favorite class: Stat 970
 
 ## Credits<a id="sec-1-6" name="sec-1-6"></a>
 
