@@ -200,9 +200,14 @@ A simple execution with pipenv will look like:
 
 ## Contributing<a id="sec-1-5" name="sec-1-5"></a>
 Name: John Han
+
 GitHub ID: hanjae1122
+
 Hometown: Seoul, Korea
+
 Favorite class so far at Penn: Stat 433, Stochastic Processes
+
+
 
 ## Credits<a id="sec-1-6" name="sec-1-6"></a>
 
