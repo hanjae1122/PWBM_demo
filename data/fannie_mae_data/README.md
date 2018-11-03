@@ -1,13 +1,13 @@
 # Preprocessing Fannie Mae
 
-First, download the fannie mae data from [the site](http://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html) by clicking &lsquo;Access the Data&rsquo; on the right-hand side. A new account is required. We recommend downloading the &lsquo;Entire Single Family Eligible Fixed Rate Mortgage Dataset&rsquo;, which is about 24GB. You may initially download just a few quarters to ensure the code is functioning properly. Downloaded files should be placed in &lsquo;raw&rsquo; in the data directory (&lsquo;fannie\_mae\_data&rsquo;):
-
-    data/fannie_mae_data/raw
-
-The files come in pairs, Acquisition and Performance, the names of which are in the following format:
+First, download the fannie mae data from [the site](http://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html) by clicking &lsquo;Access the Data&rsquo; on the right-hand side. A new account is required. We recommend downloading the &lsquo;Entire Single Family Eligible Fixed Rate Mortgage Dataset&rsquo;, which is about 24GB. You may initially download just a few quarters to ensure the code is functioning properly. Unzip all downloaded files. In each unzipped folder, there should be a pair of txt files, Acquisition and Performance, the names of which are in the following format:
 
     Acquisition_2001Q2.txt
     Performance_2001Q2.txt
+
+Place all &lsquo;Acquistion&rsquo; and &lsquo;Performance&rsquo; files in &lsquo;raw&rsquo; in the data directory (&lsquo;fannie\_mae\_data&rsquo;), which you will need to create yourself:
+
+    data/fannie_mae_data/raw
 
 In order to preprocess the data, run the following line in the command line:
 
