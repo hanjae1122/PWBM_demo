@@ -35,6 +35,7 @@ def lookup(s):
 # YOU HAVE TO CHANGE THIS PATH SO IT POINTS TO YOUR LOCAL FOLDER
 PATH = os.path.join(os.getcwd(), 'Documents', 'GitHub', 'PWBM_demo')
 #####################################################################
+
 ECON_PATH = os.path.join(PATH, 'data', 'economic')
 CURR_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'EDA')
 CLEAN_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'clean')
