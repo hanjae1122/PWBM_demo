@@ -19,6 +19,9 @@ opt = parse_args(opt_parser)
 fileslocation <- "raw"
 outputlocation <- "clean"
 
+# create directories
+dir.create(file.path(outputlocation), showWarnings = FALSE)
+
 # Create function to handle missing Current UPBs in the last record by setting them to the record prior
 # forward fill
 na.lomf <- function(x) {
