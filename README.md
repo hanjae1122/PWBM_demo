@@ -1,4 +1,4 @@
-﻿<div id="table-of-contents">
+<div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
@@ -207,15 +207,14 @@ Hometown: Seoul, Korea
 
 Favorite class so far at Penn: Stat 433, Stochastic Processes
 
-
 GitHub ID: shaot0510
 
 Hometown: China, Beijing
 
 Favorite class so far at Penn: MATH 530
 
-
 -   Name: Siyan Shen
+
 
 GitHub ID: siyanshen
 
