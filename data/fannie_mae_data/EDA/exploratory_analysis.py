@@ -13,24 +13,7 @@ pd.set_option('display.width', 100)
 sns.set(style="white", palette="muted", color_codes=True)
 
 #%%
-# define global functions
-def lookup(s):
-    """
-    This is an extremely fast approach to datetime parsing.
-    For large data, the same dates are often repeated. Rather than
-    re-parse these, we store all unique dates, parse them, and
-    use a lookup to convert all dates.
-    """
-    valid = s[~s.isna()]
-    dates = {date: pd.to_datetime(date,
-                                  infer_datetime_format=True).to_period('m')
-             for date in valid.unique()}
-    dates[np.nan] = np.nan
-    return s.map(dates)
-
-#%%
-# set PATH variables
-
+# SETTING PATH
 #####################################################################
 # YOU HAVE TO CHANGE THIS PATH SO IT POINTS TO YOUR LOCAL FOLDER
 PATH = os.path.join(os.getcwd(), 'Documents', 'GitHub', 'PWBM_demo')
@@ -41,12 +24,14 @@ CURR_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'EDA')
 CLEAN_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'clean')
 EXPORT_PATH = os.path.join(CURR_PATH, 'results')
 
+# creates new folder at EXPORT_PATH
 if not os.path.exists(EXPORT_PATH):
     print('Creating export folder')
     os.makedirs(EXPORT_PATH)
 
 #%%
-# read econ vars
+# READING ECON DATA
+# parse_dates=['DATE'] reads in DATE as a np.datetime64 object
 df_econ = pd.read_csv(os.path.join(ECON_PATH, 'agg_ntnl_mnthly.csv'),
                       parse_dates=['DATE'])
 
@@ -58,8 +43,10 @@ df_econ.columns
 
 print('Econ df has dimension {0} and columns {1}'
       .format(df_econ.shape, ', '.join([c for c in df_econ.columns])))
+# Note: [c for c in some_list] is called list comprehension
 
 #%%
+# PLOTTING
 # initial series plot
 df_econ.plot(x='DATE')
 
@@ -81,19 +68,21 @@ plt.ylabel('Percent change')
 plt.xlabel('Date')
 
 #%%
-# save plot
+# save plot as a file
+# you have to run this together with the above block to get a file export
+# do this by highlighting both blocks and running
 plt.tight_layout()
 plt.savefig(os.path.join(EXPORT_PATH, 'econ_series.png'), 
             bbox_inches='tight', dpi=300)
 
 #%%
-# heat maps with seaborn
+# correlation plots with seaborn
 df_without_date = df_econ[['LIBOR', 'IR', 'UNEMP', 'MR', 'CPI', 'HPI', 'rGDP']]
 # Draw the heatmap with the mask and correct aspect ratio
 sns.heatmap(df_without_date.corr())
 
 #%%
-# better heat map
+# better correlation plot
 # Generate a mask for the upper triangle
 D = df_without_date.shape[1]
 mask = np.zeros((D, D), dtype=np.bool)
@@ -111,6 +100,9 @@ plt.tight_layout()
 # see cumulative growth of pct_chg values
 pct_chg_df = df_econ[['DATE', 'CPI', 'HPI', 'rGDP']]
 pct_chg_df.set_index('DATE', inplace=True)
+# inplace=True makes is so that you don't have to set pct_chg_df again
+# for example, without it we would write the above statement as
+# pct_chg_df = pct_chg_df.set_index('DATE')
 pct_chg_df = pct_chg_df.add(1)
 pct_chg_df = pct_chg_df.cumprod()
 pct_chg_df.dropna(inplace=True)
@@ -118,7 +110,10 @@ pct_chg_df.dropna(inplace=True)
 pct_chg_df.plot()
 
 #%%
-# Reading data
+# READING LOAN DATA
+# Don't worry too much about how 'with' works.
+# It just allows you to temporarilty open the file to read it
+# try and except is a way of catching errors.
 with open(os.path.join(CURR_PATH, 'EDA_filelist.txt')) as f:
         filelist, yearlist = [], []
         for line in f:
@@ -165,74 +160,116 @@ for i in range(len(filelist)):
             print('\nReading {0}...'.format(filename))
             # read monthly loan data
             to_concat = pd.read_csv(os.path.join(CLEAN_PATH, filename),
-                                    engine='c')
-
+                                    engine='c', parse_dates=['ORIG_DTE', 'PRD'])
+            # know how .concat() works
             batch_to_concat = pd.concat([batch_to_concat, to_concat], axis=0)
+        
         print('Total number of rows in batch: {0}'
               .format(batch_to_concat.shape[0]))
-
-        batch_to_concat['ORIG_DTE'] = lookup(batch_to_concat['ORIG_DTE'])
-
+        
         year = yearlist[i]
         print('\nRemoving rows not in year {0}...'.format(year))
 
-        # remove vintages not from the year in list    
+        # remove vintages not from the year in list   
+        # .apply(f) applies a function f to a column
         batch_to_concat['yORIG_DTE'] = (batch_to_concat['ORIG_DTE']
                                         .apply(lambda x: int(x.year)))
         a = batch_to_concat.shape
         batch_to_concat = batch_to_concat[batch_to_concat['yORIG_DTE'] == year]
+        
         print('With year restriction, retained {0:.2f}% of {1} loans'
               .format(100 * batch_to_concat.shape[0]/a[0], a[0]))
+        
         del batch_to_concat['yORIG_DTE']
+        
         # concat to df
         df = pd.concat([df, batch_to_concat], axis=0)
+        
         print('\nTotal number of rows of df: {0}'
               .format(df.shape[0]))
 
+# make origination year column
+df['ORIG_YR'] = df['ORIG_DTE'].apply(lambda x: x.year)
+# reset index to range(df.shape[0])
+df.reset_index(drop=True, inplace=True)
+
 #%%
-# change date format
-df['PRD'] = lookup(df['PRD'])
+# .loc is a useful way to get subsets of a pandas df
+# usage: df.loc[INDEX_RANGE, LIST_OF_COLUMNS]
+# for example,
+df.loc[100000:100050, ['LOAN_ID', 'ORIG_DTE', 'PRD', 'DID_DFLT', 'NET_LOSS']]
+
+#%%
+# IMPORTANT NOTE:
+# If a loan defaulted, DID_DFLT = 1 for every PRD of that loan
+# below we use .groupby() to set DID_DFLT to zero everywhere except the last period
+# where it's 0 if the loan didn't default, and 1 if it did
+
 # conversion to string speeds up merging below
+# .astype converts to column to the specified type
 df['strPRD'] = df['PRD'].astype(str)
 
 print('\nCreating ORIG_data...')
 # variables to include
 ORIG_vars = (['strPRD', 'ORIG_AMT', 'ORIG_DTE', 'ORIG_YR', 'PRD', 'DID_DFLT'] +
              cat_vars + cont_vars)
-# just get the last row for each LOAN_ID
+
+# we use .groupby(), one of the most useful methods of pandas
+# know how .groupby() is used.
+# for each LOAN_ID, it lets us get the last row 
 ORIG_data = df.groupby('LOAN_ID')[ORIG_vars].last().reset_index()
+# thus, ORIG_data has one row for each LOAN_ID
+
 print('Number of unique LOAN_IDs: {0}'.format(ORIG_data.shape[0]))
 
 # delete DID_DFLT in original df
 del df['DID_DFLT']
 
-# get origination year
-df['ORIG_YR'] = df['ORIG_DTE'].apply(lambda x: x.year)
-
 # modify DID_DFLT column
 to_merge = ORIG_data[['LOAN_ID', 'strPRD', 'DID_DFLT']]
+# .merge() is similar to .concat()
 df = df.merge(to_merge, how='left', on=['LOAN_ID', 'strPRD'])
-# DID_DFLT is now 1 only on the date of default
+
+# DID_DFLT is now 1 only on the date of default and NA for the rest
+# we fill those NA's with 0
 df['DID_DFLT'] = df['DID_DFLT'].fillna(value=0)
-# create default vars
+# create AMT vars
 df['DFLT_AMT'] = df['FIN_UPB'] * df['DID_DFLT']
 df['NET_LOSS_AMT'] = df['NET_LOSS'] * df['DID_DFLT']
+# the above 2 lines ensure we have DFLT_AMT, NET_LOSS_AMT 
+# equal zero for all rows except the last PRD and
+# equal zero for the last PRD if the loan did not default
 
 # delete unnecessary vars
 del ORIG_data['strPRD']
 
 #%%
-# concat econ vars
+# merge econ vars to df
 df_merged = df.merge(df_econ, how='left', left_on='PRD',
                      right_on='DATE', copy=False)
 
+# DATE from df_econ is redundant with PRD
+del df_merged['DATE']
+
 #%%
+# We have 3 dataframes we can use at this point
+# - df: the original loan data
+# - ORIG_data: data for each LOAN_ID
+# - df_merged: df merged with economic variables
+
+
 # Questions
-# For each column, show the number of missing values and percentage of total
+# For each column in df_merged, show the number of missing values 
+# and percentage of total that's missing.
 
-# Calculate total number of loans for each year
-# Calculate percentage of default for each origination year year
+# Calculate the total number of unique loans for each origination year
+# Calculate percentage of defaulted loans for each origination year
+# (suggestion: value_counts(), groupby())
 
-# Plot a histogram of net loss amounts for loans with
-# nonzero losses in 2000, 2007 separately
-# What percentage of loans in 2012, 2016 had nonzero losses?
+# Plot a histogram of NET_LOSS_AMT for every loan originated in 2000, 2007 
+# that had a nonzero NET_LOSS_AMT. 
+# The 2000 and 2007 loans should be plotted on one plot but separately
+# What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
+
+# Plot a useful graph that shows an interesting relationship between the economic variables and DID_DFLT. 
+# You can be flexible in what variables and plot type (histogram, time series, correlation plot etc) you use.
