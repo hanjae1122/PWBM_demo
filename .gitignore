@@ -7,9 +7,7 @@ clean/
 vintage_analysis/
 results/
 *.tex
-*.csv
 *.org
-*.txt
 
 # Created by https://www.gitignore.io/api/r,macos,emacs,python
 
