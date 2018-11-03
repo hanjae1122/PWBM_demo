@@ -207,6 +207,8 @@ Hometown: Seoul, Korea
 
 Favorite class so far at Penn: Stat 433, Stochastic Processes
 
+ Name: Yijie Gui
+ Github id:  guiyijie
 
 
 ## Credits<a id="sec-1-6" name="sec-1-6"></a>
