@@ -30,11 +30,19 @@ def lookup(s):
 
 #%%
 # set PATH variables
+
+#####################################################################
+# YOU HAVE TO CHANGE THIS PATH SO IT POINTS TO YOUR LOCAL FOLDER
 PATH = os.path.join(os.getcwd(), 'Documents', 'GitHub', 'PWBM_demo')
+#####################################################################
 ECON_PATH = os.path.join(PATH, 'data', 'economic')
 CURR_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'EDA')
 CLEAN_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'clean')
 EXPORT_PATH = os.path.join(CURR_PATH, 'results')
+
+if not os.path.exists(EXPORT_PATH):
+    print('Creating export folder')
+    os.makedirs(EXPORT_PATH)
 
 #%%
 # read econ vars
@@ -74,7 +82,7 @@ plt.xlabel('Date')
 #%%
 # save plot
 plt.tight_layout()
-plt.savefig(os.path.join(CURR_PATH, 'plots', 'econ_series.png'), 
+plt.savefig(os.path.join(EXPORT_PATH, 'econ_series.png'), 
             bbox_inches='tight', dpi=300)
 
 #%%
