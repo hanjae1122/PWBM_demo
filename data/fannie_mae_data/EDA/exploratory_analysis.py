@@ -6,6 +6,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+pd.set_option('display.max_rows', 50)
+pd.set_option('display.max_columns', 20)
+pd.set_option('display.width', 100)
+
 sns.set(style="white", palette="muted", color_codes=True)
 
 #%%
@@ -27,9 +31,82 @@ def lookup(s):
 #%%
 # set PATH variables
 PATH = os.path.join(os.getcwd(), 'Documents', 'GitHub', 'PWBM_demo')
+ECON_PATH = os.path.join(PATH, 'data', 'economic')
 CURR_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'EDA')
 CLEAN_PATH = os.path.join(PATH, 'data', 'fannie_mae_data', 'clean')
 EXPORT_PATH = os.path.join(CURR_PATH, 'results')
+
+#%%
+# read econ vars
+df_econ = pd.read_csv(os.path.join(ECON_PATH, 'agg_ntnl_mnthly.csv'),
+                      parse_dates=['DATE'])
+
+#%%
+# explore econ data
+df_econ.shape
+df_econ.describe()
+df_econ.columns
+
+print('Econ df has dimension {0} and columns {1}'
+      .format(df_econ.shape, ', '.join([c for c in df_econ.columns])))
+
+#%%
+# initial series plot
+df_econ.plot(x='DATE')
+
+#%%
+# series plots
+date = df_econ['DATE']
+plt.figure(figsize=(10, 10))
+plt.subplot(2, 1, 1)
+for column in ['LIBOR', 'IR', 'UNEMP', 'MR']:
+    plt.plot(date, df_econ[column])
+plt.legend(loc='upper right')
+plt.ylabel('Value')
+
+plt.subplot(2, 1, 2)
+for column in ['CPI', 'HPI', 'rGDP']:
+    plt.plot(date, df_econ[column])
+plt.legend(loc='upper right')
+plt.ylabel('Percent change')
+plt.xlabel('Date')
+
+#%%
+# save plot
+plt.tight_layout()
+plt.savefig(os.path.join(CURR_PATH, 'plots', 'econ_series.png'), 
+            bbox_inches='tight', dpi=300)
+
+#%%
+# heat maps with seaborn
+df_without_date = df_econ[['LIBOR', 'IR', 'UNEMP', 'MR', 'CPI', 'HPI', 'rGDP']]
+# Draw the heatmap with the mask and correct aspect ratio
+sns.heatmap(df_without_date.corr())
+
+#%%
+# better heat map
+# Generate a mask for the upper triangle
+D = df_without_date.shape[1]
+mask = np.zeros((D, D), dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+# Set up the matplotlib figure
+plt.figure(figsize=(10, 10))
+# Generate a custom diverging colormap
+cmap = sns.diverging_palette(220, 10, as_cmap=True)
+sns.heatmap(df_without_date.corr(), mask=mask, cmap=cmap, vmax=.3, center=0,
+            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+plt.tight_layout()
+
+#%%
+# see cumulative growth of pct_chg values
+pct_chg_df = df_econ[['DATE', 'CPI', 'HPI', 'rGDP']]
+pct_chg_df.set_index('DATE', inplace=True)
+pct_chg_df = pct_chg_df.add(1)
+pct_chg_df = pct_chg_df.cumprod()
+pct_chg_df.dropna(inplace=True)
+
+pct_chg_df.plot()
 
 #%%
 # Reading data
@@ -136,7 +213,11 @@ df['NET_LOSS_AMT'] = df['NET_LOSS'] * df['DID_DFLT']
 del ORIG_data['strPRD']
 
 #%%
+# concat econ vars
+df_merged = df.merge(df_econ, how='left', left_on='PRD',
+                     right_on='DATE', copy=False)
 
+#%%
 # Questions
 # For each column, show the number of missing values and percentage of total
 
