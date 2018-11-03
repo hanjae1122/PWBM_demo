@@ -199,7 +199,7 @@ A simple execution with pipenv will look like:
 ## Notes<a id="sec-1-4" name="sec-1-4"></a>
 
 ## Contributing<a id="sec-1-5" name="sec-1-5"></a>
-Name: John Han
+-   Name: John Han
 
 GitHub ID: hanjae1122
 
