@@ -213,6 +213,8 @@ GitHub ID: siyanshen
 
 Hometown: Yangzhou, China
 
+Favorite class: Stat 970
+
 ## Credits<a id="sec-1-6" name="sec-1-6"></a>
 
 ## License<a id="sec-1-7" name="sec-1-7"></a>
