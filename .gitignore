@@ -8,7 +8,6 @@ vintage_analysis/
 *.tex
 *.csv
 *.org
-*.txt
 
 # Created by https://www.gitignore.io/api/r,macos,emacs,python
 
