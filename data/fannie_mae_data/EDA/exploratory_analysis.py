@@ -213,7 +213,11 @@ df['NET_LOSS_AMT'] = df['NET_LOSS'] * df['DID_DFLT']
 del ORIG_data['strPRD']
 
 #%%
+# concat econ vars
+df_merged = df.merge(df_econ, how='left', left_on='PRD',
+                     right_on='DATE', copy=False)
 
+#%%
 # Questions
 # For each column, show the number of missing values and percentage of total
 
