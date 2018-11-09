@@ -282,8 +282,7 @@ for c in col:
 # Calculate percentage of defaulted loans for each origination year
 # (suggestion: value_counts(), groupby())
 
-ORIG_vars1 = (['NET_LOSS_AMT', 'ORIG_AMT', 'ORIG_DTE', 'ORIG_YR', 'PRD', 'DID_DFLT'] +
-             cat_vars + cont_vars)
+ORIG_vars1 = (['NET_LOSS_AMT', 'ORIG_YR', 'DID_DFLT'] + cat_vars + cont_vars)
 
 # for each LOAN_ID, it lets us get the last row 
 ORIG_data1 = df.groupby('LOAN_ID')[ORIG_vars1].last().reset_index()
@@ -305,7 +304,9 @@ for y in yearlist:
 # Plot a histogram of NET_LOSS_AMT for every loan originated in 2000, 2007 
 # that had a nonzero NET_LOSS_AMT. 
 # The 2000 and 2007 loans should be plotted on one plot but separately
-    
+
+rows_2000 = ORIG_data1.loc[ORIG_data1['NET_LOSS_AMT'] != 0 and ORIG_data1['ORIG_YR']== 2000]
+
 #%%
 # What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
 nnz1 = 0;
