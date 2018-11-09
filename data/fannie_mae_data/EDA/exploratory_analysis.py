@@ -273,6 +273,17 @@ del df_merged['DATE']
 
 # Plot a useful graph that shows an interesting relationship between the economic variables and DID_DFLT. 
 # You can be flexible in what variables and plot type (histogram, time series, correlation plot etc) you use.
+
+#####################################################################
+# KEEP CODE CONCISE
+# YOU DON'T HAVE TO SPECIFY EACH COLUMN NAME. YOU CAN ITERATE THROUGH THEM WITH A FOR LOOP
+for colname in ['LIBOR', 'CPI', 'IR', 'UNEMP', 'MR', 'HPI', 'rGDP']:
+    column = df_merged[[colname]]
+    print('Number of missing values: {0}'.format(column.isna().sum()))
+    print('percentage: {0}'.format(column.isna().sum()/2239685)) 
+# CHECK THE ANSWER. .isna() can be applied to the entire dataframe
+#####################################################################
+
 libor = df_merged[['LIBOR']]
 print('Number of missing values: {0}'.format(libor.isna().sum()))
 print('percentage: {0}'.format(libor.isna().sum()/2239685))
@@ -301,8 +312,17 @@ rgdp = df_merged[['rGDP']]
 print('Number of missing values: {0}'.format(rgdp.isna().sum()))
 print('percentage: {0}'.format(rgdp.isna().sum()/2239685))
 #%%
+#####################################################################
+# percentage of defaulted loans for each origination year?
+# CHECK ANSWER; USE .groupby()
+#####################################################################
 ORIG_data['ORIG_YR'].value_counts()
 #%%
+
+#####################################################################
+# AVOID USING UNDESCRIPTIVE VARIABLE NAMES LIKE a,b,c,d,e,f
+# HISTOGRAMS HAVE TO BE ON THE SAME AXIS. YOURS IS ON DIFFERENT AXES
+#####################################################################
 a = df.loc[df['ORIG_YR']==2000]
 b = a.loc[a['NET_LOSS_AMT']!=0]
 c = b['NET_LOSS_AMT']
@@ -314,6 +334,9 @@ f = e['NET_LOSS_AMT']
 plt.subplot(212)
 plt.hist(f)
 #%%
+#####################################################################
+# AGAIN USE GROUPBY
+#####################################################################
 df_2012 = df.loc[df['ORIG_YR']==2012]
 net_loss_amt_2012 = df_2012[['NET_LOSS_AMT']]
 nonz_net_loss_amt_2012 = net_loss_amt_2012.loc[net_loss_amt_2012['NET_LOSS_AMT']!=0]
