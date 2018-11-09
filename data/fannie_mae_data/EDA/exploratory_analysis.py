@@ -16,7 +16,7 @@ sns.set(style="white", palette="muted", color_codes=True)
 # SETTING PATH
 #####################################################################
 # YOU HAVE TO CHANGE THIS PATH SO IT POINTS TO YOUR LOCAL FOLDER
-PATH = os.path.join(os.getcwd(), 'Documents', 'GitHub', 'PWBM_demo')
+PATH = os.path.join(os.getcwd(), 'Downloads', 'project', 'PWBM_demo')
 #####################################################################
 
 ECON_PATH = os.path.join(PATH, 'data', 'economic')
@@ -67,7 +67,7 @@ plt.legend(loc='upper right')
 plt.ylabel('Percent change')
 plt.xlabel('Date')
 
-#%%
+
 # save plot as a file
 # you have to run this together with the above block to get a file export
 # do this by highlighting both blocks and running
@@ -273,3 +273,53 @@ del df_merged['DATE']
 
 # Plot a useful graph that shows an interesting relationship between the economic variables and DID_DFLT. 
 # You can be flexible in what variables and plot type (histogram, time series, correlation plot etc) you use.
+libor = df_merged[['LIBOR']]
+print('Number of missing values: {0}'.format(libor.isna().sum()))
+print('percentage: {0}'.format(libor.isna().sum()/2239685))
+
+cpi = df_merged[['CPI']]
+print('Number of missing values: {0}'.format(cpi.isna().sum()))
+print('percentage: {0}'.format(cpi.isna().sum()/2239685))
+
+ir = df_merged[['IR']]
+print('Number of missing values: {0}'.format(ir.isna().sum()))
+print('percentage: {0}'.format(ir.isna().sum()/2239685))
+
+unemp = df_merged[['UNEMP']]
+print('Number of missing values: {0}'.format(unemp.isna().sum()))
+print('percentage: {0}'.format(unemp.isna().sum()/2239685))
+
+mr = df_merged[['MR']]
+print('Number of missing values: {0}'.format(mr.isna().sum()))
+print('percentage: {0}'.format(mr.isna().sum()/2239685))
+
+hpi = df_merged[['HPI']]
+print('Number of missing values: {0}'.format(hpi.isna().sum()))
+print('percentage: {0}'.format(hpi.isna().sum()/2239685))
+
+rgdp = df_merged[['rGDP']]
+print('Number of missing values: {0}'.format(rgdp.isna().sum()))
+print('percentage: {0}'.format(rgdp.isna().sum()/2239685))
+#%%
+ORIG_data['ORIG_YR'].value_counts()
+#%%
+a = df.loc[df['ORIG_YR']==2000]
+b = a.loc[a['NET_LOSS_AMT']!=0]
+c = b['NET_LOSS_AMT']
+plt.subplot(211)
+plt.hist(c)
+d = df.loc[df['ORIG_YR']==2007]
+e = d.loc[d['NET_LOSS_AMT']!=0]
+f = e['NET_LOSS_AMT']
+plt.subplot(212)
+plt.hist(f)
+#%%
+df_2012 = df.loc[df['ORIG_YR']==2012]
+net_loss_amt_2012 = df_2012[['NET_LOSS_AMT']]
+nonz_net_loss_amt_2012 = net_loss_amt_2012.loc[net_loss_amt_2012['NET_LOSS_AMT']!=0]
+print('Percentage of 2012: {0}'.format(nonz_net_loss_amt_2012.count()/net_loss_amt_2012.count()))
+
+df_2016 = df.loc[df['ORIG_YR']==2016]
+net_loss_amt_2016 = df_2016[['NET_LOSS_AMT']]
+nonz_net_loss_amt_2016 = net_loss_amt_2016.loc[net_loss_amt_2016['NET_LOSS_AMT']!=0]
+print('Percentage of 2016: {0}'.format(nonz_net_loss_amt_2016.count()/net_loss_amt_2016.count()))
