@@ -282,24 +282,50 @@ for c in col:
 # Calculate percentage of defaulted loans for each origination year
 # (suggestion: value_counts(), groupby())
 
-ORIG_vars = (['strPRD', 'ORIG_AMT', 'ORIG_DTE', 'ORIG_YR', 'PRD', 'DID_DFLT'] +
+ORIG_vars1 = (['NET_LOSS_AMT', 'ORIG_AMT', 'ORIG_DTE', 'ORIG_YR', 'PRD', 'DID_DFLT'] +
              cat_vars + cont_vars)
 
 # for each LOAN_ID, it lets us get the last row 
-ORIG_data = df.groupby('LOAN_ID')[ORIG_vars].last().reset_index()
+ORIG_data1 = df.groupby('LOAN_ID')[ORIG_vars1].last().reset_index()
 # thus, ORIG_data has one row for each LOAN_ID
 
-uniq_loan = ORIG_data['ORIG_YR'].value_counts()
+uniq_loan = ORIG_data1['ORIG_YR'].value_counts()
 for y in yearlist:
-    print('\n Number of unique loans for {0} is {1}'.format(y,uniq_loan[y]))
-yrlist = ORIG_data.groupby('ORIG_YR')['LOAN_ID','DID_DFLT']
+    n = uniq_loan[y]
+    ndf = 0
+    for index, row in ORIG_data1.iterrows():
+        if row['ORIG_YR'] == y and row['DID_DFLT'] == 1:
+            ndf += 1
+    percentage = ndf/n
+    print('Number of unique loans for {0} is {1}, the percentage of defaulted' 
+          ' loans of which is {2}'.format(y, n, percentage))
 
 
 #%%
 # Plot a histogram of NET_LOSS_AMT for every loan originated in 2000, 2007 
 # that had a nonzero NET_LOSS_AMT. 
 # The 2000 and 2007 loans should be plotted on one plot but separately
+    
+#%%
 # What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
+nnz1 = 0;
+n1 = 0
+nnz2 = 0;
+n2 = 0;
+for index, row in ORIG_data1.iterrows():
+    if row['ORIG_YR'] == 2012:
+        n1 += 1
+        if row['NET_LOSS_AMT'] != 0:
+            nnz1 += 1
+    if row['ORIG_YR'] == 2016:
+        n2 += 1
+        if row['NET_LOSS_AMT'] != 0:
+            nnz2 += 1
 
+p1 = nnz1/n1
+p2 = nnz2/n2
+print('nonzero net loss amount for 2012 is {0}, for 2016 is {1}'.format(p1,p2))
+
+#%%
 # Plot a useful graph that shows an interesting relationship between the economic variables and DID_DFLT. 
 # You can be flexible in what variables and plot type (histogram, time series, correlation plot etc) you use.
