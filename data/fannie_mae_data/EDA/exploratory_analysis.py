@@ -290,8 +290,10 @@ ORIG_data = df.groupby('LOAN_ID')[ORIG_vars].last().reset_index()
 # thus, ORIG_data has one row for each LOAN_ID
 
 uniq_loan = ORIG_data['ORIG_YR'].value_counts()
-print('\nNumber of unique loans of each year:')
-print(uniq_loan)
+for y in yearlist:
+    print('\n Number of unique loans for {0} is {1}'.format(y,uniq_loan[y]))
+yrlist = ORIG_data.groupby('ORIG_YR')['LOAN_ID','DID_DFLT']
+
 
 #%%
 # Plot a histogram of NET_LOSS_AMT for every loan originated in 2000, 2007 
