@@ -67,7 +67,6 @@ plt.legend(loc='upper right')
 plt.ylabel('Percent change')
 plt.xlabel('Date')
 
-#%%
 # save plot as a file
 # you have to run this together with the above block to get a file export
 # do this by highlighting both blocks and running
@@ -220,6 +219,7 @@ ORIG_vars = (['strPRD', 'ORIG_AMT', 'ORIG_DTE', 'ORIG_YR', 'PRD', 'DID_DFLT'] +
 ORIG_data = df.groupby('LOAN_ID')[ORIG_vars].last().reset_index()
 # thus, ORIG_data has one row for each LOAN_ID
 
+
 print('Number of unique LOAN_IDs: {0}'.format(ORIG_data.shape[0]))
 
 # delete DID_DFLT in original df
@@ -251,6 +251,7 @@ df_merged = df.merge(df_econ, how='left', left_on='PRD',
 # DATE from df_econ is redundant with PRD
 del df_merged['DATE']
 
+print(df_merged)
 #%%
 # We have 3 dataframes we can use at this point
 # - df: the original loan data
@@ -270,6 +271,28 @@ del df_merged['DATE']
 # that had a nonzero NET_LOSS_AMT. 
 # The 2000 and 2007 loans should be plotted on one plot but separately
 # What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
-
 # Plot a useful graph that shows an interesting relationship between the economic variables and DID_DFLT. 
 # You can be flexible in what variables and plot type (histogram, time series, correlation plot etc) you use.
+
+#%%
+#Q1
+for column in df_merged:
+    count_nan = df_merged[column].isna().sum()
+    count_none_nan = df_merged[column].count()
+    percentage = count_nan / (count_nan + count_none_nan + count_nan) * 100
+    print(column, count_nan, percentage)
+    
+#%%
+#Q2
+print(ORIG_data.groupby('ORIG_YR').size().reset_index(name='counts'))
+df_new = ORIG_data.groupby(['ORIG_YR', 'DID_DFLT']).size().reset_index(name='counts')
+print(df_new)
+
+#%%
+#Q3
+df_2007 = df[df['ORIG_YR'] == 2007]
+df_new1 = df[[ 'NET_LOSS_AMT']]
+df_new1.hist(column='NET_LOSS_AMT')
+df_2000 = df[df['ORIG_YR'] == 2000]
+df_new2 = df[[ 'NET_LOSS_AMT']]
+df_new2.hist(column='NET_LOSS_AMT')
