@@ -16,7 +16,7 @@ sns.set(style="white", palette="muted", color_codes=True)
 # SETTING PATH
 #####################################################################
 # YOU HAVE TO CHANGE THIS PATH SO IT POINTS TO YOUR LOCAL FOLDER
-PATH = os.path.join(os.getcwd(), 'Documents', 'GitHub', 'PWBM_demo')
+PATH = os.path.join('/Users', 'shensiyan','Documents', 'GitHub', 'PWBM_demo')
 #####################################################################
 
 ECON_PATH = os.path.join(PATH, 'data', 'economic')
@@ -37,6 +37,7 @@ df_econ = pd.read_csv(os.path.join(ECON_PATH, 'agg_ntnl_mnthly.csv'),
 
 #%%
 # explore econ data
+# why are the next 3 lines necessary???
 df_econ.shape
 df_econ.describe()
 df_econ.columns
@@ -143,8 +144,8 @@ cat_vars, cont_vars = varlist['CAT'], varlist['CONT']
 del varlist
 
 print('Reading files: {0}'.format([', '.join(l) for l in filelist]))
-print('Continuous variables: '
-      '{0}\nCategorical variables: {1}'.format(', '.join(cont_vars),
+print('Continuous variables: {0}'
+      '\nCategorical variables: {1}'.format(', '.join(cont_vars),
                                                ', '.join(cat_vars)))
 
 #%%
@@ -257,15 +258,33 @@ del df_merged['DATE']
 # - ORIG_data: data for each LOAN_ID
 # - df_merged: df merged with economic variables
 
-
 # Questions
+
+#%%
 # For each column in df_merged, show the number of missing values 
 # and percentage of total that's missing.
+col = df_merged.columns
+ncol = col.shape[0]
+count = np.zeros(ncol)
+misscount = np.zeros(ncol)
 
+for c in col:
+    misscount = df_merged[c].isnull().sum()
+    count = df_merged[c].count()+misscount
+    print(count)
+    percentage = misscount/count
+    #print('\nTotal number of missing values in Column {0} is {1}; '
+   #       'percentage of total that is missing is {2}'.format(c,misscount,percentage))
+            
+
+
+#%%
 # Calculate the total number of unique loans for each origination year
 # Calculate percentage of defaulted loans for each origination year
 # (suggestion: value_counts(), groupby())
 
+
+#%%
 # Plot a histogram of NET_LOSS_AMT for every loan originated in 2000, 2007 
 # that had a nonzero NET_LOSS_AMT. 
 # The 2000 and 2007 loans should be plotted on one plot but separately
