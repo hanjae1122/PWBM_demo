@@ -305,8 +305,17 @@ for y in yearlist:
 # that had a nonzero NET_LOSS_AMT. 
 # The 2000 and 2007 loans should be plotted on one plot but separately
 
-rows_2000 = ORIG_data1.loc[ORIG_data1['NET_LOSS_AMT'] != 0 and ORIG_data1['ORIG_YR']== 2000]
+rows_2000 = ORIG_data1.loc[(ORIG_data1['NET_LOSS_AMT'] != 0) & (ORIG_data1['ORIG_YR'] == 2000)]
+rows_2007 = ORIG_data1.loc[(ORIG_data1['NET_LOSS_AMT'] != 0) & (ORIG_data1['ORIG_YR'] == 2007)]
+plt.figure(figsize=(10, 10))
 
+plt.subplot(2, 1, 1)
+plt.xlabel('NET_LOSS_AMT for 2000')
+plt.hist(rows_2000['NET_LOSS_AMT'], bins = 15)
+
+plt.subplot(2, 1, 2)
+plt.xlabel('NET_LOSS_AMT for 2007')
+plt.hist(rows_2007['NET_LOSS_AMT'], bins = 15)
 #%%
 # What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
 nnz1 = 0;
