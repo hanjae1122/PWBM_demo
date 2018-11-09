@@ -271,10 +271,9 @@ misscount = np.zeros(ncol)
 for c in col:
     misscount = df_merged[c].isnull().sum()
     count = df_merged[c].count()+misscount
-    print(count)
     percentage = misscount/count
-    #print('\nTotal number of missing values in Column {0} is {1}; '
-   #       'percentage of total that is missing is {2}'.format(c,misscount,percentage))
+    print('\nTotal number of missing values in Column {0} is {1}; percentage of'
+          ' total that is missing is {2}'.format(c,misscount,percentage))
             
 
 
@@ -283,6 +282,16 @@ for c in col:
 # Calculate percentage of defaulted loans for each origination year
 # (suggestion: value_counts(), groupby())
 
+ORIG_vars = (['strPRD', 'ORIG_AMT', 'ORIG_DTE', 'ORIG_YR', 'PRD', 'DID_DFLT'] +
+             cat_vars + cont_vars)
+
+# for each LOAN_ID, it lets us get the last row 
+ORIG_data = df.groupby('LOAN_ID')[ORIG_vars].last().reset_index()
+# thus, ORIG_data has one row for each LOAN_ID
+
+uniq_loan = ORIG_data['ORIG_YR'].value_counts()
+print('\nNumber of unique loans of each year:')
+print(uniq_loan)
 
 #%%
 # Plot a histogram of NET_LOSS_AMT for every loan originated in 2000, 2007 
