@@ -263,6 +263,10 @@ del df_merged['DATE']
 #%%
 # For each column in df_merged, show the number of missing values 
 # and percentage of total that's missing.
+
+#####################################################################
+# This works but check the answer to show these numbers in a dataframe instead of printing each line
+#####################################################################
 col = df_merged.columns
 ncol = col.shape[0]
 count = np.zeros(ncol)
@@ -281,6 +285,11 @@ for c in col:
 # Calculate the total number of unique loans for each origination year
 # Calculate percentage of defaulted loans for each origination year
 # (suggestion: value_counts(), groupby())
+#####################################################################
+# Using groupby will make this much more efficient and concise
+ORIG_data['ORIG_YR'].value_counts()
+ORIG_data.groupby('ORIG_YR')['DID_DFLT'].mean()
+#####################################################################
 
 ORIG_vars1 = (['NET_LOSS_AMT', 'ORIG_YR', 'DID_DFLT'] + cat_vars + cont_vars)
 
@@ -318,6 +327,10 @@ plt.xlabel('NET_LOSS_AMT for 2007')
 plt.hist(rows_2007['NET_LOSS_AMT'], bins = 15)
 #%%
 # What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
+#####################################################################
+# For loops and operations like n1 += 1 can take a long time
+# Again, I would recommend using groupby
+#####################################################################
 nnz1 = 0;
 n1 = 0
 nnz2 = 0;
