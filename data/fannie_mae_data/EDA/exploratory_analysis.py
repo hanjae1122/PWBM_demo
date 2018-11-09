@@ -262,12 +262,19 @@ del df_merged['DATE']
 # Questions
 # For each column in df_merged, show the number of missing values 
 # and percentage of total that's missing.
+#####################################################################
+# nice
+#####################################################################
+
 missing_numbers = df_merged.isna().sum()
 missing_percentage = missing_numbers/df_merged.shape[0] 
 
 # Calculate the total number of unique loans for each origination year
 # Calculate percentage of defaulted loans for each origination year
 # (suggestion: value_counts(), groupby())
+#####################################################################
+# For the 2nd one, we want the percentage so use .mean() instead of .sum()
+#####################################################################
 ORIG_data['ORIG_YR'].value_counts()
 ORIG_data.groupby('ORIG_YR')['DID_DFLT'].sum()
 
@@ -275,6 +282,11 @@ ORIG_data.groupby('ORIG_YR')['DID_DFLT'].sum()
 # that had a nonzero NET_LOSS_AMT. 
 # The 2000 and 2007 loans should be plotted on one plot but separately
 # What percentage of loans originated in 2012, 2016 had nonzero NET_LOSS_AMT?
+#####################################################################
+# great
+# for the 1st one, the answer shows how to plot the two histograms on the SAME AXES
+# for the 2nd one, we can use groupby again
+#####################################################################
 NET_loss = df.groupby('LOAN_ID')['NET_LOSS_AMT','ORIG_YR'].last().reset_index()
 NET_loss2 = NET_loss['NET_LOSS_AMT']
 ind = NET_loss2.nonzero()[0]
